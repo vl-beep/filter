@@ -6,37 +6,7 @@ import { useFilters } from "@/context/FiltersContext";
 import { Checkbox } from "@/components/ui/Checkbox";
 import { SearchInput } from "@/components/ui/SearchInput";
 import { IconArrowLeft } from "@/components/ui/icons";
-
-// ─── Data ─────────────────────────────────────────────────────────────────────
-
-type ZoneType = "Заряд" | "Логистика" | "Сервис";
-
-interface Zone {
-  name: string;
-  type: ZoneType;
-}
-
-const TECHZONES_DATA: { group: string; zones: Zone[] }[] = [
-  {
-    group: "Советск",
-    zones: [
-      { name: "Алтуфьево", type: "Логистика" },
-      { name: "Багратионовский", type: "Заряд" },
-      { name: "Балтийский", type: "Заряд" },
-      { name: "Балтийский 2", type: "Заряд" },
-      { name: "Гвардейский 1", type: "Заряд" },
-      { name: "Гвардейский 2", type: "Заряд" },
-    ],
-  },
-  {
-    group: "Калининград",
-    zones: [
-      { name: "Северный", type: "Заряд" },
-      { name: "Центральный", type: "Логистика" },
-      { name: "Южный", type: "Сервис" },
-    ],
-  },
-];
+import { TECHZONES_DATA, ZoneType, Zone } from "@/lib/filterData";
 
 const TYPE_FILTERS: (ZoneType | "Все")[] = ["Заряд", "Логистика", "Все"];
 
@@ -74,10 +44,12 @@ function TopAppBar({
   title,
   onBack,
   onSelectAll,
+  allSelected,
 }: {
   title: string;
   onBack: () => void;
   onSelectAll: () => void;
+  allSelected: boolean;
 }) {
   return (
     <div className="flex items-center gap-2 h-[52px] px-2 bg-white shrink-0">
@@ -97,7 +69,7 @@ function TopAppBar({
         className="px-2 py-3 shrink-0 active:opacity-50 transition-opacity duration-100"
       >
         <span className="text-base font-medium leading-5 text-brand">
-          Выбрать все
+          {allSelected ? "Сбросить" : "Выбрать все"}
         </span>
       </button>
     </div>
@@ -147,7 +119,9 @@ export function TechzoneScreen() {
 
   const filtered = useMemo(() => {
     const q = search.toLowerCase();
-    return TECHZONES_DATA.map((g) => ({
+    return TECHZONES_DATA.filter((g) =>
+      state.cities.length === 0 || state.cities.includes(g.group)
+    ).map((g) => ({
       ...g,
       zones: g.zones.filter((z) => {
         const matchesSearch = !q || z.name.toLowerCase().includes(q);
@@ -155,20 +129,23 @@ export function TechzoneScreen() {
         return matchesSearch && matchesType;
       }),
     })).filter((g) => g.zones.length > 0);
-  }, [search, typeFilter]);
+  }, [search, typeFilter, state.cities]);
 
   const toggle = (name: string) =>
     setLocalSelected((s) =>
       s.includes(name) ? s.filter((z) => z !== name) : [...s, name]
     );
 
+  const visibleNames = useMemo(
+    () => filtered.flatMap((g) => g.zones.map((z) => z.name)),
+    [filtered]
+  );
+
   const selectAll = () => {
-    const visible = filtered.flatMap((g) => g.zones.map((z) => z.name));
-    const allSelected = visible.every((z) => localSelected.includes(z));
-    if (allSelected) {
-      setLocalSelected((s) => s.filter((z) => !visible.includes(z)));
+    if (localSelected.length > 0) {
+      setLocalSelected([]);
     } else {
-      setLocalSelected((s) => [...new Set([...s, ...visible])]);
+      setLocalSelected(visibleNames);
     }
   };
 
@@ -186,6 +163,7 @@ export function TechzoneScreen() {
           title="Техзоны"
           onBack={() => router.push("/filters")}
           onSelectAll={selectAll}
+          allSelected={localSelected.length > 0}
         />
       </div>
 

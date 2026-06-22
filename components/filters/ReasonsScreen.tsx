@@ -70,8 +70,7 @@ export function ReasonsScreen() {
     );
 
   const selectAll = () => {
-    const allSelected = ALL_ITEMS.every((r) => localSelected.includes(r));
-    if (allSelected) {
+    if (localSelected.length > 0) {
       setLocalSelected([]);
     } else {
       setLocalSelected(ALL_ITEMS);
@@ -104,7 +103,7 @@ export function ReasonsScreen() {
             onClick={selectAll}
             className="px-2 py-3 shrink-0 active:opacity-50 transition-opacity duration-100"
           >
-            <span className="text-base font-medium leading-5 text-brand">Выбрать все</span>
+            <span className="text-base font-medium leading-5 text-brand">{localSelected.length > 0 ? "Сбросить" : "Выбрать все"}</span>
           </button>
         </div>
       </div>

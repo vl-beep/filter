@@ -58,10 +58,12 @@ function TopAppBar({
   title,
   onBack,
   onSelectAll,
+  allSelected,
 }: {
   title: string;
   onBack: () => void;
   onSelectAll: () => void;
+  allSelected: boolean;
 }) {
   return (
     <div className="flex items-center gap-2 h-[52px] px-2 bg-white shrink-0">
@@ -81,7 +83,7 @@ function TopAppBar({
         className="px-2 py-3 shrink-0 active:opacity-50 transition-opacity duration-100"
       >
         <span className="text-base font-medium leading-5 text-brand">
-          Выбрать все
+          {allSelected ? "Сбросить" : "Выбрать все"}
         </span>
       </button>
     </div>
@@ -149,13 +151,13 @@ export function ModelScreen() {
       s.includes(name) ? s.filter((m) => m !== name) : [...s, name]
     );
 
+  const visibleNames = filtered.map((m) => m.name);
+
   const selectAll = () => {
-    const visible = filtered.map((m) => m.name);
-    const allSelected = visible.every((m) => localSelected.includes(m));
-    if (allSelected) {
-      setLocalSelected((s) => s.filter((m) => !visible.includes(m)));
+    if (localSelected.length > 0) {
+      setLocalSelected([]);
     } else {
-      setLocalSelected((s) => [...new Set([...s, ...visible])]);
+      setLocalSelected(visibleNames);
     }
   };
 
@@ -173,6 +175,7 @@ export function ModelScreen() {
           title="Модель транспорта"
           onBack={() => router.push("/filters")}
           onSelectAll={selectAll}
+          allSelected={localSelected.length > 0}
         />
       </div>
 

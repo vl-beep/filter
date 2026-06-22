@@ -6,6 +6,7 @@ import { useFilters } from "@/context/FiltersContext";
 import { Checkbox } from "@/components/ui/Checkbox";
 import { SearchInput } from "@/components/ui/SearchInput";
 import { IconArrowLeft, IconCity } from "@/components/ui/icons";
+import { CITY_TO_ZONES } from "@/lib/filterData";
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 
@@ -70,10 +71,12 @@ function TopAppBar({
   title,
   onBack,
   onSelectAll,
+  hasSelection,
 }: {
   title: string;
   onBack: () => void;
   onSelectAll: () => void;
+  hasSelection: boolean;
 }) {
   return (
     <div className="flex items-center gap-2 h-[52px] px-2 bg-white shrink-0">
@@ -93,7 +96,7 @@ function TopAppBar({
         className="px-2 py-3 shrink-0 active:opacity-50 transition-opacity duration-100"
       >
         <span className="text-base font-medium leading-5 text-brand">
-          Выбрать все
+          {hasSelection ? "Сбросить" : "Выбрать все"}
         </span>
       </button>
     </div>
@@ -152,17 +155,23 @@ export function LocationsScreen() {
     );
 
   const selectAll = () => {
-    const visible = filtered.flatMap((g) => g.cities);
-    const allSelected = visible.every((c) => localSelected.includes(c));
-    if (allSelected) {
-      setLocalSelected((s) => s.filter((c) => !visible.includes(c)));
+    if (localSelected.length > 0) {
+      setLocalSelected([]);
     } else {
-      setLocalSelected((s) => [...new Set([...s, ...visible])]);
+      const visible = filtered.flatMap((g) => g.cities);
+      setLocalSelected(visible);
     }
   };
 
   const apply = () => {
-    update({ cities: localSelected });
+    const removedCities = state.cities.filter((c) => !localSelected.includes(c));
+    const removedZones = removedCities.flatMap((c) => CITY_TO_ZONES[c] ?? []);
+    update({
+      cities: localSelected,
+      techzones: removedZones.length > 0
+        ? state.techzones.filter((z) => !removedZones.includes(z))
+        : state.techzones,
+    });
     router.push("/filters");
   };
 
@@ -175,6 +184,7 @@ export function LocationsScreen() {
           title="Локация"
           onBack={() => router.push("/filters")}
           onSelectAll={selectAll}
+          hasSelection={localSelected.length > 0}
         />
       </div>
 

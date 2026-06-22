@@ -77,11 +77,10 @@ export function ErrorScreen() {
     );
 
   const selectAll = () => {
-    const allSelected = filtered.every((e) => localSelected.includes(e));
-    if (allSelected) {
-      setLocalSelected((s) => s.filter((e) => !filtered.includes(e)));
+    if (localSelected.length > 0) {
+      setLocalSelected([]);
     } else {
-      setLocalSelected((s) => [...new Set([...s, ...filtered])]);
+      setLocalSelected(filtered);
     }
   };
 
@@ -112,7 +111,7 @@ export function ErrorScreen() {
             onClick={selectAll}
             className="px-2 py-3 shrink-0 active:opacity-50 transition-opacity duration-100"
           >
-            <span className="text-base font-medium leading-5 text-brand">Выбрать все</span>
+            <span className="text-base font-medium leading-5 text-brand">{localSelected.length > 0 ? "Сбросить" : "Выбрать все"}</span>
           </button>
         </div>
       </div>

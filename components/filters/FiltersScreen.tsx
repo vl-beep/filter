@@ -14,6 +14,7 @@ import {
   IconClock,
   IconTriangleAlert,
 } from "@/components/ui/icons";
+import { CITY_TO_ZONES } from "@/lib/filterData";
 
 // ─── Count calculation ────────────────────────────────────────────────────────
 
@@ -22,7 +23,9 @@ function calcCount(s: FiltersState): number {
     s.cities.length +
     s.techzones.length +
     s.models.length +
-    (s.availabilityTab !== 0 ? 1 : 0);
+    (s.availabilityTab !== 0 ? 1 : 0) +
+    s.errors.length +
+    s.reasons.length;
 
   const toggleTotal =
     (s.inLease ? 1 : 0) +
@@ -31,10 +34,15 @@ function calcCount(s: FiltersState): number {
     (s.enabled ? 1 : 0) +
     (s.serviceMode ? 1 : 0);
 
-  if (selTotal + toggleTotal === 0) return 238;
+  const valueTotal =
+    (s.chargeValue ? 1 : 0) +
+    (s.idleValue ? 1 : 0) +
+    (s.offlineValue ? 1 : 0);
+
+  if (selTotal + toggleTotal + valueTotal === 0) return 238;
 
   const base = selTotal === 0 ? 238 : Math.min(237, 26 + (selTotal - 1) * 12);
-  return Math.max(1, base - toggleTotal * 15);
+  return Math.max(1, base - toggleTotal * 15 - valueTotal * 10);
 }
 
 function hoursLabel(n: string): string {
@@ -64,7 +72,7 @@ function taskLabel(n: number): string {
 // ─── Quick-select lists shown as chips ────────────────────────────────────────
 
 const CITY_CHIPS = ["Москва", "Санкт–Петербург", "Новосибирск", "Краснодар"];
-const MODEL_CHIPS = ["Eleven", "Ninebot SL 90", "Ninebot B100", "Ninebot Max"];
+const MODEL_CHIPS = ["Eleven", "Ninebot SL 90", "Ninebot B100", "Ninebot MAX Pro"];
 
 // ─── Primitives ───────────────────────────────────────────────────────────────
 
@@ -124,7 +132,7 @@ function SelectorRow({
       onClick={onClick}
       className="w-full flex items-center gap-2 h-14 px-4 bg-bg-secondary rounded-[20px] active:bg-[#dde1ea] transition-colors duration-100"
     >
-      <span className="flex-1 text-base font-medium leading-5 text-text-primary text-left">
+      <span className="flex-1 min-w-0 text-base font-medium leading-5 text-text-primary text-left truncate">
         {label}
       </span>
       <div className="flex items-center gap-1">
@@ -144,6 +152,7 @@ function ParamRow({
   onToggle,
   toggleOn,
   onClick,
+  counter,
 }: {
   label: string;
   subtitle?: string;
@@ -151,6 +160,7 @@ function ParamRow({
   onToggle?: () => void;
   toggleOn?: boolean;
   onClick?: () => void;
+  counter?: number;
 }) {
   const isChevron = right === "chevron";
   const Wrapper = isChevron ? "button" : "div";
@@ -174,7 +184,8 @@ function ParamRow({
           </span>
         )}
       </div>
-      <div className="shrink-0">
+      <div className="shrink-0 flex items-center gap-1">
+        {isChevron && counter !== undefined && counter > 0 && <Counter value={counter} />}
         {isChevron ? (
           <IconChevronRight size={16} />
         ) : (
@@ -341,7 +352,10 @@ export function FiltersScreen() {
   const handleConfirmDelete = () => {
     if (confirmDeleteId) {
       deleteFilter(confirmDeleteId);
-      if (activeFilterId === confirmDeleteId) setActiveFilterId(null);
+      if (activeFilterId === confirmDeleteId) {
+        setActiveFilterId(null);
+        reset();
+      }
     }
     closeConfirm();
   };
@@ -359,12 +373,17 @@ export function FiltersScreen() {
     return () => clearTimeout(t);
   }, [state]);
 
-  const toggleCity = (city: string) =>
-    update({
-      cities: state.cities.includes(city)
-        ? state.cities.filter((c) => c !== city)
-        : [...state.cities, city],
-    });
+  const toggleCity = (city: string) => {
+    if (state.cities.includes(city)) {
+      const removedZones = CITY_TO_ZONES[city] ?? [];
+      update({
+        cities: state.cities.filter((c) => c !== city),
+        techzones: state.techzones.filter((z) => !removedZones.includes(z)),
+      });
+    } else {
+      update({ cities: [...state.cities, city] });
+    }
+  };
 
   const toggleModel = (model: string) =>
     update({
@@ -386,7 +405,12 @@ export function FiltersScreen() {
     state.outOfCity ||
     state.noGps ||
     state.enabled ||
-    state.serviceMode;
+    state.serviceMode ||
+    !!state.chargeValue ||
+    !!state.idleValue ||
+    !!state.offlineValue ||
+    state.errors.length > 0 ||
+    state.reasons.length > 0;
 
   const activeFilter =
     activeFilterId !== null && activeFilterId !== "all"
@@ -486,7 +510,7 @@ export function FiltersScreen() {
             <div className="px-4">
               <SelectorRow
                 label={state.techzones.length > 0
-                  ? `Выбрано ${state.techzones.length}`
+                  ? state.techzones.join(", ")
                   : "Все"}
                 count={state.techzones.length}
                 onClick={() => router.push("/filters/techzone")}
@@ -537,9 +561,10 @@ export function FiltersScreen() {
             {state.availabilityTab !== 1 && (
               <ParamRow
                 label="Причины снятия"
-                subtitle={state.reasons.length > 0 ? `Выбрано ${state.reasons.length}` : "Не выбрано"}
+                subtitle={state.reasons.length > 0 ? state.reasons.join(", ") : "Не выбрано"}
                 right="chevron"
                 onClick={() => router.push("/filters/reasons")}
+                counter={state.reasons.length || undefined}
               />
             )}
             <ParamRow
@@ -591,6 +616,7 @@ export function FiltersScreen() {
         <StatusItem
           icon={<IconTriangleAlert />}
           label="Ошибки"
+          subtitle={state.errors.length === 0 ? "Не выбрано" : undefined}
           counter={state.errors.length || undefined}
           onClick={() => router.push("/filters/errors")}
         />
@@ -670,8 +696,8 @@ export function FiltersScreen() {
           >
             {/* Text */}
             <div className="flex flex-col items-center gap-1 text-center">
-              <span className="text-[22px] font-semibold leading-8 text-text-primary">Удалить фильтры?</span>
-              <span className="text-base font-normal leading-6 text-text-secondary">Выбранные фильтры<br />будут удалены</span>
+              <span className="text-[22px] font-semibold leading-8 text-text-primary">Удалить фильтр?</span>
+              <span className="text-base font-normal leading-6 text-text-secondary">Выбранный фильтр<br />будет удалён</span>
             </div>
             {/* Buttons */}
             <div className="flex gap-2">
@@ -695,8 +721,8 @@ export function FiltersScreen() {
       {/* Toast */}
       {showToast && (
         <div
-          className={`fixed top-4 left-4 right-4 z-[80] flex items-start gap-2 bg-[#40a17e] rounded-[16px] p-3 transition-all duration-300 ${
-            toastVisible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2"
+          className={`fixed top-10 left-2 right-2 z-[80] flex items-center gap-3 bg-[#40a17e] rounded-[16px] px-4 h-12 transition-all duration-300 ${
+            toastVisible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-1"
           }`}
         >
           {/* Checkmark circle icon */}
@@ -705,13 +731,13 @@ export function FiltersScreen() {
             <path d="M8.5 12l2.5 2.5 4.5-4.5" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
           {/* Text */}
-          <span className="flex-1 text-[14px] font-medium leading-4 tracking-[0.14px] text-white py-1">
+          <span className="flex-1 text-base font-medium leading-5 text-white">
             Изменения сохранены
           </span>
           {/* Close button */}
           <button onClick={closeToast} className="shrink-0 active:opacity-60">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-              <path d="M6 6l12 12M18 6L6 18" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M5 5l10 10M15 5L5 15" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
             </svg>
           </button>
         </div>
@@ -755,19 +781,20 @@ export function FiltersScreen() {
             <div className="px-4 pb-4">
               <button
                 onClick={() => {
-                  if (favoriteName.trim()) {
-                    const id = saveFilter(favoriteName.trim(), state);
-                    setActiveFilterId(id);
-                    setFavoriteName("");
-                    closeSheet();
-                    openToast();
-                  } else {
-                    closeSheet();
-                  }
+                  if (!favoriteName.trim()) return;
+                  const id = saveFilter(favoriteName.trim(), state);
+                  setActiveFilterId(id);
+                  setFavoriteName("");
+                  closeSheet();
+                  openToast();
                 }}
-                className="w-full h-12 rounded-[16px] bg-[#804aff] active:bg-[#6b3aff] transition-colors duration-100 flex items-center justify-center"
+                className={`w-full h-12 rounded-[16px] transition-colors duration-100 flex items-center justify-center ${
+                  favoriteName.trim()
+                    ? "bg-[#804aff] active:bg-[#6b3aff]"
+                    : "bg-bg-secondary"
+                }`}
               >
-                <span className="text-[18px] font-medium leading-5 text-white">
+                <span className={`text-[18px] font-medium leading-5 ${favoriteName.trim() ? "text-white" : "text-brand"}`}>
                   Сохранить в избранное
                 </span>
               </button>
