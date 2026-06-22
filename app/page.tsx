@@ -1,65 +1,46 @@
-import Image from "next/image";
+"use client";
+
+import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="flex flex-col w-full h-dvh bg-bg-secondary">
+      {/* Status bar */}
+      <div className="flex items-center justify-between h-6 px-4 bg-[#181d24] shrink-0">
+        <span className="text-white text-[14px] font-medium leading-none">12:30</span>
+        <div className="flex items-center gap-1.5">
+          <svg width="18" height="12" viewBox="0 0 18 12" fill="none">
+            <rect x="0" y="7" width="3" height="5" rx="0.5" fill="rgba(255,255,255,0.9)" />
+            <rect x="5" y="5" width="3" height="7" rx="0.5" fill="rgba(255,255,255,0.9)" />
+            <rect x="10" y="2" width="3" height="10" rx="0.5" fill="rgba(255,255,255,0.9)" />
+            <rect x="15" y="0" width="3" height="12" rx="0.5" fill="rgba(255,255,255,0.9)" />
+          </svg>
+          <svg width="24" height="12" viewBox="0 0 24 12" fill="none">
+            <rect x="0.5" y="0.5" width="20" height="11" rx="2.5" stroke="rgba(255,255,255,0.9)" />
+            <rect x="2" y="2" width="15" height="8" rx="1.5" fill="rgba(255,255,255,0.9)" />
+            <path d="M22 4v4a2 2 0 000-4z" fill="rgba(255,255,255,0.9)" />
+          </svg>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+      </div>
+
+      {/* Top app bar */}
+      <div className="flex items-center justify-between h-[52px] px-4 bg-[#181d24] shrink-0">
+        <span className="text-white text-base font-semibold leading-5">Задачи</span>
+        <Link
+          href="/filters"
+          className="flex items-center gap-1.5 px-3 h-8 rounded-[12px] bg-white/10 active:bg-white/20 transition-colors duration-100"
+        >
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M2 4h12M4 8h8M6 12h4" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+          </svg>
+          <span className="text-white text-[14px] font-medium leading-5">Фильтры</span>
+        </Link>
+      </div>
+
+      {/* Placeholder content */}
+      <div className="flex-1 flex items-center justify-center">
+        <span className="text-text-secondary text-base">Список задач</span>
+      </div>
     </div>
   );
 }
