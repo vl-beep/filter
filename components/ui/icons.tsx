@@ -56,15 +56,17 @@ export function IconStar({ className }: { className?: string }) {
 }
 
 // ic_out_20_flashOn — stroked lightning bolt from DS
-// ic_24_networkSignalCrossedOut from DS
+// ic_24_networkSignalCrossedOut from DS (vector is 14×17px at offset 5,4 within 24×24)
 export function IconNetworkOff() {
   return (
-    <svg width="24" height="24" viewBox="0 0 14 17" fill="none">
-      <path fillRule="evenodd" clipRule="evenodd" d="M1 9C1.55 9 2 9.45 2 10L2 15C2 15.55 1.55 16 1 16C0.45 16 0 15.55 0 15L0 10C0 9.45 0.45 9 1 9Z" fill="#1F2631"/>
-      <path fillRule="evenodd" clipRule="evenodd" d="M0.793 3.793C1.184 3.402 1.816 3.402 2.207 3.793L5.707 7.293L8 9.586L10 11.586L12 13.586L13.707 15.293C14.098 15.684 14.098 16.316 13.707 16.707C13.317 17.098 12.683 17.098 12.293 16.707L10 14.414L8 12.414L6 10.414L4 8.414L0.793 5.207C0.402 4.816 0.402 4.184 0.793 3.793Z" fill="#1F2631"/>
-      <path fillRule="evenodd" clipRule="evenodd" d="M13 0C13.55 0 14 0.45 14 1L14 13.586L12 11.586L12 1C12 0.45 12.45 0 13 0ZM10 9.586L10 5C10 4.45 9.55 4 9 4C8.45 4 8 4.45 8 5L8 7.586L10 9.586Z" fill="#1F2631"/>
-      <path d="M9 16C9.55 16 10 15.55 10 15L10 14.414L8 12.414L8 15C8 15.55 8.45 16 9 16Z" fill="#1F2631"/>
-      <path d="M6 15L6 10.414L4 8.414L4 15C4 15.55 4.45 16 5 16C5.55 16 6 15.55 6 15Z" fill="#1F2631"/>
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+      <g transform="translate(5, 4)">
+        <path fillRule="evenodd" clipRule="evenodd" d="M1 9C1.55 9 2 9.45 2 10L2 15C2 15.55 1.55 16 1 16C0.45 16 0 15.55 0 15L0 10C0 9.45 0.45 9 1 9Z" fill="#1F2631"/>
+        <path fillRule="evenodd" clipRule="evenodd" d="M0.793 3.793C1.184 3.402 1.816 3.402 2.207 3.793L5.707 7.293L8 9.586L10 11.586L12 13.586L13.707 15.293C14.098 15.684 14.098 16.316 13.707 16.707C13.317 17.098 12.683 17.098 12.293 16.707L10 14.414L8 12.414L6 10.414L4 8.414L0.793 5.207C0.402 4.816 0.402 4.184 0.793 3.793Z" fill="#1F2631"/>
+        <path fillRule="evenodd" clipRule="evenodd" d="M13 0C13.55 0 14 0.45 14 1L14 13.586L12 11.586L12 1C12 0.45 12.45 0 13 0ZM10 9.586L10 5C10 4.45 9.55 4 9 4C8.45 4 8 4.45 8 5L8 7.586L10 9.586Z" fill="#1F2631"/>
+        <path d="M9 16C9.55 16 10 15.55 10 15L10 14.414L8 12.414L8 15C8 15.55 8.45 16 9 16Z" fill="#1F2631"/>
+        <path d="M6 15L6 10.414L4 8.414L4 15C4 15.55 4.45 16 5 16C5.55 16 6 15.55 6 15Z" fill="#1F2631"/>
+      </g>
     </svg>
   );
 }
