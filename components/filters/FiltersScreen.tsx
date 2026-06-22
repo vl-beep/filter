@@ -236,32 +236,6 @@ function StatusItem({
 
 // ─── Status Bar ──────────────────────────────────────────────────────────────
 
-function StatusBar() {
-  return (
-    <div className="relative flex items-center justify-between bg-status-bar h-6 px-4 shrink-0">
-      <span className="text-white text-[14px] font-medium leading-none">12:30</span>
-      <div className="flex items-center gap-1.5">
-        <svg width="18" height="12" viewBox="0 0 18 12" fill="none">
-          <rect x="0" y="7" width="3" height="5" rx="0.5" fill="rgba(255,255,255,0.9)" />
-          <rect x="5" y="5" width="3" height="7" rx="0.5" fill="rgba(255,255,255,0.9)" />
-          <rect x="10" y="2" width="3" height="10" rx="0.5" fill="rgba(255,255,255,0.9)" />
-          <rect x="15" y="0" width="3" height="12" rx="0.5" fill="rgba(255,255,255,0.9)" />
-        </svg>
-        <svg width="16" height="12" viewBox="0 0 16 12" fill="none">
-          <path d="M8 9.5a1 1 0 100 2 1 1 0 000-2z" fill="rgba(255,255,255,0.9)" />
-          <path d="M5.2 7.2A4 4 0 018 6a4 4 0 012.8 1.2" stroke="rgba(255,255,255,0.9)" strokeWidth="1.2" strokeLinecap="round" />
-          <path d="M2.8 4.8A7 7 0 018 3a7 7 0 015.2 1.8" stroke="rgba(255,255,255,0.9)" strokeWidth="1.2" strokeLinecap="round" />
-          <path d="M0.5 2.5A10 10 0 018 0a10 10 0 017.5 2.5" stroke="rgba(255,255,255,0.9)" strokeWidth="1.2" strokeLinecap="round" />
-        </svg>
-        <svg width="24" height="12" viewBox="0 0 24 12" fill="none">
-          <rect x="0.5" y="0.5" width="20" height="11" rx="2.5" stroke="rgba(255,255,255,0.9)" />
-          <rect x="2" y="2" width="15" height="8" rx="1.5" fill="rgba(255,255,255,0.9)" />
-          <path d="M22 4v4a2 2 0 000-4z" fill="rgba(255,255,255,0.9)" />
-        </svg>
-      </div>
-    </div>
-  );
-}
 
 // ─── Top App Bar ──────────────────────────────────────────────────────────────
 
@@ -440,7 +414,6 @@ export function FiltersScreen() {
 
       {/* Fixed header */}
       <div className="shrink-0 shadow-[0px_0px_8px_0px_rgba(33,41,51,0.15),0px_0px_2px_0px_rgba(33,41,51,0.16)]">
-        <StatusBar />
         <TopAppBar
           onReset={activeFilter !== null ? () => openConfirm(activeFilter.id) : reset}
           resetEnabled={hasAnyFilter || activeFilter !== null}

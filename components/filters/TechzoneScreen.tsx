@@ -10,33 +10,6 @@ import { TECHZONES_DATA, ZoneType, Zone } from "@/lib/filterData";
 
 const TYPE_FILTERS: (ZoneType | "Все")[] = ["Заряд", "Логистика", "Все"];
 
-// ─── Status bar ───────────────────────────────────────────────────────────────
-
-function StatusBar() {
-  return (
-    <div className="flex items-center justify-between h-6 px-4 bg-white shrink-0">
-      <span className="text-[#212933] text-[14px] font-medium leading-none">2:29</span>
-      <div className="flex items-center gap-1.5">
-        <svg width="18" height="12" viewBox="0 0 18 12" fill="none">
-          <rect x="0" y="7" width="3" height="5" rx="0.5" fill="#212933" />
-          <rect x="5" y="5" width="3" height="7" rx="0.5" fill="#212933" />
-          <rect x="10" y="2" width="3" height="10" rx="0.5" fill="#212933" />
-          <rect x="15" y="0" width="3" height="12" rx="0.5" fill="#212933" />
-        </svg>
-        <svg width="16" height="12" viewBox="0 0 16 12" fill="none">
-          <path d="M8 9.5a1 1 0 100 2 1 1 0 000-2z" fill="#212933" />
-          <path d="M5.2 7.2A4 4 0 018 6a4 4 0 012.8 1.2" stroke="#212933" strokeWidth="1.2" strokeLinecap="round" />
-          <path d="M2.8 4.8A7 7 0 018 3a7 7 0 015.2 1.8" stroke="#212933" strokeWidth="1.2" strokeLinecap="round" />
-        </svg>
-        <svg width="24" height="12" viewBox="0 0 24 12" fill="none">
-          <rect x="0.5" y="0.5" width="20" height="11" rx="2.5" stroke="#212933" />
-          <rect x="2" y="2" width="15" height="8" rx="1.5" fill="#212933" />
-          <path d="M22 4v4a2 2 0 000-4z" fill="#212933" />
-        </svg>
-      </div>
-    </div>
-  );
-}
 
 // ─── TopAppBar ────────────────────────────────────────────────────────────────
 
@@ -158,7 +131,6 @@ export function TechzoneScreen() {
     <div className="flex flex-col w-full h-dvh overflow-hidden">
       {/* Header */}
       <div className="shrink-0 shadow-[0px_0px_8px_0px_rgba(33,41,51,0.10),0px_0px_2px_0px_rgba(33,41,51,0.12)]">
-        <StatusBar />
         <TopAppBar
           title="Техзоны"
           onBack={() => router.push("/filters")}

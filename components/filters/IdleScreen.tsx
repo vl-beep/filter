@@ -6,26 +6,6 @@ import { useFilters } from "@/context/FiltersContext";
 import { Toggle } from "@/components/ui/Toggle";
 import { IconArrowLeft } from "@/components/ui/icons";
 
-function StatusBar() {
-  return (
-    <div className="flex items-center justify-between h-6 px-4 bg-white shrink-0">
-      <span className="text-[#212933] text-[14px] font-medium leading-none">2:29</span>
-      <div className="flex items-center gap-1.5">
-        <svg width="18" height="12" viewBox="0 0 18 12" fill="none">
-          <rect x="0" y="7" width="3" height="5" rx="0.5" fill="#212933" />
-          <rect x="5" y="5" width="3" height="7" rx="0.5" fill="#212933" />
-          <rect x="10" y="2" width="3" height="10" rx="0.5" fill="#212933" />
-          <rect x="15" y="0" width="3" height="12" rx="0.5" fill="#212933" />
-        </svg>
-        <svg width="24" height="12" viewBox="0 0 24 12" fill="none">
-          <rect x="0.5" y="0.5" width="20" height="11" rx="2.5" stroke="#212933" />
-          <rect x="2" y="2" width="15" height="8" rx="1.5" fill="#212933" />
-          <path d="M22 4v4a2 2 0 000-4z" fill="#212933" />
-        </svg>
-      </div>
-    </div>
-  );
-}
 
 export function IdleScreen() {
   const router = useRouter();
@@ -45,7 +25,6 @@ export function IdleScreen() {
     <div className="flex flex-col w-full h-dvh overflow-hidden bg-white">
       {/* Header */}
       <div className="shrink-0 shadow-[0px_0px_8px_0px_rgba(33,41,51,0.10),0px_0px_2px_0px_rgba(33,41,51,0.12)]">
-        <StatusBar />
         <div className="flex items-center gap-2 h-[52px] px-2 bg-white shrink-0">
           <button
             onClick={() => router.push("/filters")}
