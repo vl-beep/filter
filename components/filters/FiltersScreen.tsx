@@ -137,7 +137,7 @@ function SelectorRow({
       </span>
       <div className="flex items-center gap-1">
         {count !== undefined && count > 0 && <Counter value={count} />}
-        <IconChevronRight size={24} />
+        <IconChevronRight size={16} />
       </div>
     </button>
   );
