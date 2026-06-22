@@ -300,6 +300,21 @@ export function FiltersScreen() {
   const [isLoading, setIsLoading] = useState(false);
   const [displayCount, setDisplayCount] = useState(() => calcCount(state));
   const isFirst = useRef(true);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const saved = sessionStorage.getItem("filters-scroll");
+    if (saved && scrollRef.current) {
+      scrollRef.current.scrollTop = parseInt(saved, 10);
+    }
+  }, []);
+
+  const navigateTo = (path: string) => {
+    if (scrollRef.current) {
+      sessionStorage.setItem("filters-scroll", String(scrollRef.current.scrollTop));
+    }
+    router.push(path);
+  };
 
   const [showSheet, setShowSheet] = useState(false);
   const [sheetVisible, setSheetVisible] = useState(false);
@@ -434,7 +449,7 @@ export function FiltersScreen() {
       </div>
 
       {/* Scrollable content */}
-      <div className="flex-1 overflow-y-auto bg-white">
+      <div ref={scrollRef} className="flex-1 overflow-y-auto bg-white">
 
         {/* Saved filters row */}
         {savedFilters.length > 0 && (
@@ -485,7 +500,7 @@ export function FiltersScreen() {
             <SectionHeader
               label="Локация"
               action="Все"
-              onAction={() => router.push("/filters/locations")}
+              onAction={() => navigateTo("/filters/locations")}
             />
             <div className="flex flex-wrap gap-2 px-4">
               {CITY_CHIPS.map((city) => (
@@ -505,7 +520,7 @@ export function FiltersScreen() {
             <SectionHeader
               label="Техзоны"
               action="Все"
-              onAction={() => router.push("/filters/techzone")}
+              onAction={() => navigateTo("/filters/techzone")}
             />
             <div className="px-4">
               <SelectorRow
@@ -513,7 +528,7 @@ export function FiltersScreen() {
                   ? state.techzones.join(", ")
                   : "Все"}
                 count={state.techzones.length}
-                onClick={() => router.push("/filters/techzone")}
+                onClick={() => navigateTo("/filters/techzone")}
               />
             </div>
           </div>
@@ -524,7 +539,7 @@ export function FiltersScreen() {
             <SectionHeader
               label="Модель транспорта"
               action="Все"
-              onAction={() => router.push("/filters/model")}
+              onAction={() => navigateTo("/filters/model")}
             />
             <div className="flex flex-wrap gap-2 px-4">
               {MODEL_CHIPS.map((model) => (
@@ -563,7 +578,7 @@ export function FiltersScreen() {
                 label="Причины снятия"
                 subtitle={state.reasons.length > 0 ? state.reasons.join(", ") : "Не выбрано"}
                 right="chevron"
-                onClick={() => router.push("/filters/reasons")}
+                onClick={() => navigateTo("/filters/reasons")}
                 counter={state.reasons.length || undefined}
               />
             )}
@@ -587,7 +602,7 @@ export function FiltersScreen() {
                   : "Не выбрано"
               }
               right="chevron"
-              onClick={() => router.push("/filters/charge")}
+              onClick={() => navigateTo("/filters/charge")}
             />
           </div>
         </div>
@@ -605,20 +620,20 @@ export function FiltersScreen() {
           icon={<IconLightning />}
           label="Не в сети"
           subtitle={state.offlineValue ? `${state.offlineDirection === "more" ? "Больше" : "Меньше"} ${hoursLabel(state.offlineValue)}` : "Не выбрано"}
-          onClick={() => router.push("/filters/offline")}
+          onClick={() => navigateTo("/filters/offline")}
         />
         <StatusItem
           icon={<IconClock />}
           label="Простой"
           subtitle={state.idleValue ? `${hoursLabel(state.idleValue)}${state.idleOnlyWithoutRent ? " • Без аренды" : ""}` : "Не выбрано"}
-          onClick={() => router.push("/filters/idle")}
+          onClick={() => navigateTo("/filters/idle")}
         />
         <StatusItem
           icon={<IconTriangleAlert />}
           label="Ошибки"
           subtitle={state.errors.length === 0 ? "Не выбрано" : undefined}
           counter={state.errors.length || undefined}
-          onClick={() => router.push("/filters/errors")}
+          onClick={() => navigateTo("/filters/errors")}
         />
 
         <div className="h-2" />
