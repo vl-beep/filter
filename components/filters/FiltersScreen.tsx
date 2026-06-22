@@ -10,7 +10,7 @@ import {
   IconArrowLeft,
   IconChevronRight,
   IconStar,
-  IconLightning,
+  IconNetworkOff,
   IconClock,
   IconTriangleAlert,
 } from "@/components/ui/icons";
@@ -617,7 +617,7 @@ export function FiltersScreen() {
         <div className="h-3" />
 
         <StatusItem
-          icon={<IconLightning />}
+          icon={<IconNetworkOff />}
           label="Не в сети"
           subtitle={state.offlineValue ? `${state.offlineDirection === "more" ? "Больше" : "Меньше"} ${hoursLabel(state.offlineValue)}` : "Не выбрано"}
           onClick={() => navigateTo("/filters/offline")}

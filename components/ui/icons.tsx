@@ -56,16 +56,15 @@ export function IconStar({ className }: { className?: string }) {
 }
 
 // ic_out_20_flashOn — stroked lightning bolt from DS
-export function IconLightning() {
+// ic_24_networkSignalCrossedOut from DS
+export function IconNetworkOff() {
   return (
-    <svg width="24" height="24" viewBox="0 0 16 22" fill="none">
-      <path
-        d="M11.9996 15.0002L7.66656 20.6542C7.12756 21.3562 6.11856 20.9192 6.11856 19.9832V13.0302C6.11856 12.4702 5.72256 12.0152 5.23456 12.0152H1.88456C1.12456 12.0152 0.71956 10.9852 1.22156 10.3292L3.77356 7.00022M3.77356 7.00022L8.49656 1.35022C9.02156 0.640218 10.0066 1.08222 10.0066 2.02822V9.05922C10.0066 9.62622 10.3926 10.0852 10.8686 10.0852H14.1356C14.8776 10.0852 15.2736 11.1272 14.7826 11.7902L11.9996 15.0002"
-        stroke="#1F2631"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
+    <svg width="24" height="24" viewBox="0 0 14 17" fill="none">
+      <path fillRule="evenodd" clipRule="evenodd" d="M1 9C1.55 9 2 9.45 2 10L2 15C2 15.55 1.55 16 1 16C0.45 16 0 15.55 0 15L0 10C0 9.45 0.45 9 1 9Z" fill="#1F2631"/>
+      <path fillRule="evenodd" clipRule="evenodd" d="M0.793 3.793C1.184 3.402 1.816 3.402 2.207 3.793L5.707 7.293L8 9.586L10 11.586L12 13.586L13.707 15.293C14.098 15.684 14.098 16.316 13.707 16.707C13.317 17.098 12.683 17.098 12.293 16.707L10 14.414L8 12.414L6 10.414L4 8.414L0.793 5.207C0.402 4.816 0.402 4.184 0.793 3.793Z" fill="#1F2631"/>
+      <path fillRule="evenodd" clipRule="evenodd" d="M13 0C13.55 0 14 0.45 14 1L14 13.586L12 11.586L12 1C12 0.45 12.45 0 13 0ZM10 9.586L10 5C10 4.45 9.55 4 9 4C8.45 4 8 4.45 8 5L8 7.586L10 9.586Z" fill="#1F2631"/>
+      <path d="M9 16C9.55 16 10 15.55 10 15L10 14.414L8 12.414L8 15C8 15.55 8.45 16 9 16Z" fill="#1F2631"/>
+      <path d="M6 15L6 10.414L4 8.414L4 15C4 15.55 4.45 16 5 16C5.55 16 6 15.55 6 15Z" fill="#1F2631"/>
     </svg>
   );
 }
