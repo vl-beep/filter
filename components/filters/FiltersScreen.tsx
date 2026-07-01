@@ -60,15 +60,6 @@ function statesEqual(a: FiltersState, b: FiltersState): boolean {
   return JSON.stringify(a) === JSON.stringify(b);
 }
 
-function taskLabel(n: number): string {
-  const mod10 = n % 10;
-  const mod100 = n % 100;
-  if (mod100 >= 11 && mod100 <= 14) return `${n} задач`;
-  if (mod10 === 1) return `${n} задача`;
-  if (mod10 >= 2 && mod10 <= 4) return `${n} задачи`;
-  return `${n} задач`;
-}
-
 // ─── Quick-select lists shown as chips ────────────────────────────────────────
 
 const CITY_CHIPS = ["Москва", "Санкт–Петербург", "Новосибирск", "Краснодар"];
@@ -667,7 +658,7 @@ export function FiltersScreen() {
             <div className="size-5 rounded-full border-2 border-white/30 border-t-white animate-spin" />
           ) : (
             <span className="text-[18px] font-medium leading-5 text-white">
-              Показать {taskLabel(displayCount)}
+              Показать {displayCount} СИМ
             </span>
           )}
         </button>
